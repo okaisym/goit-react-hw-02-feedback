@@ -1,3 +1,6 @@
+import React from "react";
+import {Component} from React;
+
 export const App = () => {
   return (
     <div
@@ -14,3 +17,11 @@ export const App = () => {
     </div>
   );
 };
+
+export class App extends Component {
+  state = {
+    good: 0,
+    neutral: 0,
+    bad: 0
+  },
+  };
