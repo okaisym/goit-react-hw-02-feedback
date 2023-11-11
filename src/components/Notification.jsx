@@ -1,3 +1,3 @@
 export const Notification = ({ message }) => (
-  <Notification>{message}</Notification>
+  <p>{message}</p>
 );

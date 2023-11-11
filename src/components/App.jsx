@@ -1,85 +1,71 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import { Statistics } from './Feedback/Statistics';
 import { Section } from './Feedback/Section';
-import { FeedbackOptions } from "./Feedback/FeedbackOptions";
-import {FeedbackContainter, FeedbackIndicators} from './App.styled';
-import {Notification} from './Notification'
+import { FeedbackOptions } from './Feedback/FeedbackOptions';
+import { FeedbackContainter, FeedbackIndicators } from './App.styled';
+import { Notification } from './Notification';
 
 export class App extends Component {
   state = {
     good: 0,
     neutral: 0,
-    bad: 0
-};
+    bad: 0,
+  };
 
-updateFeedback = option => {
-  this.setState(prevState => ({
-    [option]: prevState[option] + 1,
-  }));
-};
+  updateFeedback = option => {
+    this.setState(prevState => ({
+      [option]: prevState[option] + 1,
+    }));
+  };
 
-onClickGood = () => {
-  this.setState(prevState => {
-    return {
-      good: prevState.good + 1,
-    };
-  });
-};
+  countTotalFeedback = () => {
+    const { good, neutral, bad } = this.state;
+    return bad + good + neutral;
+  };
 
-onClickNeutral = () => {
-  this.setState(prevState => {
-    return {
-      neutral: prevState.neutral + 1,
-    };
-  });
-};
+  countPositiveFeedbackPercentage = () => {
+    const total = this.countTotalFeedback();
+    if (total === 0) {
+      return 0;
+    }
+    const percentage = (this.state.good / total) * 100;
+    return percentage.toFixed(1);
+  };
 
-onClickBad = () => {
-  this.setState(prevState => {
-    return {
-      bad: prevState.bad + 1,
-    };
-  });
-};
+  clearStatistic = () => {
+    this.setState({
+      good: 0,
+      neutral: 0,
+      bad: 0,
+    });
+  };
 
-countTotalFeedback = () => {
-  const {good, neutral, bad} = this.state;
-  return bad + good + neutral;
-};
+  render() {
+    const { good, neutral, bad } = this.state;
+    const options = Object.keys(this.state);
+    const total = this.countTotalFeedback();
 
-countPositiveFeedbackPercentage = () => {
-const total = this.countTotalFeedback();
-  if (total === 0) {
-    return 0; 
+    return (
+      <FeedbackContainter>
+        <Section title="Please leave feedback">
+          <FeedbackOptions options={options} onLeaveFeedback={this.updateFeedback} />
+        </Section>
+        <FeedbackIndicators>
+          {total > 0 ? (
+            <Statistics
+              title="Statistics"
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              totalAmount={total}
+              positivePercentage={this.countPositiveFeedbackPercentage()}
+              clearStatistic={this.clearStatistic}
+            />
+          ) : (
+            <Notification message="There is no feedback" />
+          )}
+        </FeedbackIndicators>
+      </FeedbackContainter>
+    );
   }
-  const percentage = (this.state.good / total) * 100;
-  return percentage.toFixed(1)
-};
-
-render() {
-  const { good, neutral, bad } = this.state;
-  const options = Object.keys(this.state);
-
-  return (
-    <FeedbackContainter>
-      <Section title="Please leave feedback">
-        <FeedbackOptions
-          options={options}
-          onLeaveFeedback={this.updateFeedback}
-        />
-      </Section>
-      <FeedbackIndicators>
-        <Statistics title='Statistics'
-        good={good}
-        neutral={neutral}
-        bad={bad}
-        totalAmount={this.countTotalFeedback()}
-        positivePercentage={this.countPositiveFeedbackPercentage()}
-        />
-         <Notification message="There is no feedback" />
-      </FeedbackIndicators>
-    </FeedbackContainter>
-  );
 }
-}
-
