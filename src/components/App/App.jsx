@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Statistics } from './Feedback/Statistics';
-import { Section } from './Feedback/Section';
-import { FeedbackOptions } from './Feedback/FeedbackOptions';
+import { Statistics } from '../../Statistics/Statistics';
+import { Section } from '../Section/Section';
+import { FeedbackOptions } from '../FeedbackOptions/FeedbackOptions';
 import { FeedbackContainter, FeedbackIndicators } from './App.styled';
-import { Notification } from './Notification';
+import { Notification } from '../Notification/Notification';
 
 export class App extends Component {
   state = {
